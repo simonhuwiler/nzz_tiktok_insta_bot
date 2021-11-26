@@ -25,7 +25,7 @@ caps = settings.desired_cap.copy()
 caps['avd'] = settings.avds[args.avd]['avd']
 
 # Create Dir if not exist
-p = Path('../export/%s' % args.user)
+p = settings.data_root / args.user
 if not p.exists():
     os.mkdir(p)
 
