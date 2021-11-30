@@ -110,3 +110,10 @@ API31 and Canary
 https://github.com/newbit1/rootAVD
 https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#installation
 
+## Screenrecording on Huawei not working
+Install scrcpy
+https://github.com/Genymobile/scrcpy
+
+```
+brew install scrcpy
+```

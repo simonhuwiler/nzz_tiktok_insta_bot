@@ -33,6 +33,7 @@ avds = {
 
 desired_cap = {
   "platformName": "Android",
+  # "platformVersion": "7",
   "automationName": "UiAutomator2",
   "noReset": True,
   "isHeadless": True,
@@ -42,9 +43,9 @@ desired_cap = {
   "waitForIdleTimeout": 0,
 }
 
-#tiktok_app = '/Users/simon/Documents/projects/tiktok_insta_bot/lib/TikTok_v20.9.3_apkpure.com.apk'
+# tiktok_app = '/Users/simon/Documents/projects/nzz_tiktok_insta_bot/lib/TikTok_v20.9.3_apkpure.com.apk'
 tiktok_app = 'com.zhiliaoapp.musically'
-# instagram_app = '/Users/simon/Documents/projects/tiktok_insta_bot/lib/Instagram_v202.0.0.37.123_apkpure.com.apk'
+# instagram_app = '/Users/simon/Documents/projects/nzz_tiktok_insta_bot/lib/Instagram_v202.0.0.37.123_apkpure.com.apk'
 instagram_app = 'com.instagram.android'
 
 data_root = Path('../../nzz_tiktok_insta_bot_data/export/')
