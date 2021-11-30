@@ -56,7 +56,7 @@ def test_insta_user(driver, user):
     return user.lower() == logged_user.lower()
     
 def next(driver):
-    driver.swipe(1000, 800, 1000, 500, 350)
+    driver.swipe(800, 1000, 800, 600, 200)
 
 def sleep(how):
     if how == 'long': time.sleep(10)
@@ -89,4 +89,23 @@ def record_video_scrcpy(user, log_name, serial):
     return subprocess.Popen(args=["scrcpy", "--serial", serial,
       "-n", "-N",
       "-r", get_video_path(user, log_name),
-      "-b", "4000000"], stdout=subprocess.PIPE)
+      "-b", "5000000"], stdout=subprocess.PIPE)
+
+def get_last_highscore(user):
+    config = settings.data_root / Path(user)
+    create_dir(config)
+    if Path(config / '_config.json').is_file():
+        with open(config / '_config.json', 'r') as f:
+            data = json.load(f)
+            return data['highscore']
+
+    return 0
+
+def save_last_highscore(user, highscore):
+    config = settings.data_root / Path(user)
+    create_dir(config)
+    with open(config / '_config.json', 'w') as f:
+        json.dump({
+            'highscore': highscore,
+            'date': time.time()
+            }, f)

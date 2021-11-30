@@ -8,12 +8,17 @@ import time
 import settings
 import botlib
 
-def run(user, caps, port):
+def run(user, serial, caps, port):
     log = []
 
     # caps['app'] = settings.tiktok_app
     caps['appPackage'] = settings.tiktok_app
     caps['appActivity'] = 'com.ss.android.ugc.aweme.splash.SplashActivity'
+
+    # Open User-Settings
+    last_highscore = botlib.get_last_highscore(user)
+
+    print("⏫ Current Highscore: %s" % last_highscore)
 
     # Create Driver
     driver = webdriver.Remote(
@@ -27,14 +32,18 @@ def run(user, caps, port):
         driver.quit()
         raise("Wrong TikTok-User!")
 
-    # Start Screen Recording
-    driver.start_recording_screen(
-        timeLimit = "1800",
-        bitRate = "3000000",
-    )
-    recording_time = time.time()
     video_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))
-    log_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))
+    log_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))        
+
+    # Start Screen Recording
+    # This uses the default way of screen recording. But Huawei has removed the capability. So switch to second party
+    #driver.start_recording_screen(
+    #    timeLimit = "1800",
+    #    bitRate = "3000000",
+    #)
+    
+    recorder = botlib.record_video_scrcpy(user, log_name, serial)
+    recording_time = time.time()
 
     # Read
     ident = "com.zhiliaoapp.musically:id/title"
@@ -58,13 +67,28 @@ def run(user, caps, port):
         comments = str_if_exists("com.zhiliaoapp.musically:id/a7r")
         shares = str_if_exists("com.zhiliaoapp.musically:id/dls")
 
+        def s2int(s):
+            try:
+                if 'k' in s.lower():
+                    s = s.lower().replace('k', '')
+                    return float(s) * 1000
+                if 'm' in s.lower():
+                    s = s.lower().replace('m', '')
+                    return float(s) * 1000000
+                return float(s)
+            except Exception as e:
+                print("⛔ Could not convert number: %s" % s)
+                raise e
+
+            
+        # print("%s -> %s" % (likes, s2int(likes)))
         # print("User: %s | Message: %s | Likes: %s | Comments: %s | Shares: %s" % (user, text, likes,comments,shares))
         #print("User: %s" % user)
         #print("Text: %s" % text)
         return {
             'username': user,
             'message': text,
-            'likes': likes,
+            'likes': s2int(likes),
             'comments': comments,
             'shares': shares,
             'timein': timeabs,
@@ -112,23 +136,19 @@ def run(user, caps, port):
                     'timein': r['timein'],
                     'videodelta': r['videodelta'],
                     'videoname': r['videoname'],
-                    'platform': r['platform'],
-                    "hashtags": settings.users[user]
+                    'isnewhighscore': r['likes'] > last_highscore,
+                    'currenthighscore': last_highscore,
+                    'platform': r['platform']
                 })            
 
             if errorcount >= 3:
                 # Hm, something went wrong. Stop it.
                 raise Exception("⛔ Something went wrong, could not find user name. App crashed?")
 
-            found = False
-            if r['message']:
-                for hash in settings.users[user]:
-                    if (hash.lower() in r['message'].lower()) or (hash.lower() in r['username']):
-                        print("✅ Hashtag found! '%s'" % hash)
-                        found = True
-                        break
-            if found:
+            if r['likes'] > last_highscore:
+                print("⏫ New Highscore: %s (before %s)" % (r['likes'], last_highscore))
                 botlib.sleep('long')
+                last_highscore = r['likes']
             else:
                 botlib.sleep('short')
 
@@ -144,7 +164,9 @@ def run(user, caps, port):
 
     except Exception as e:
         botlib.safe_log(user, log_name, log)
-        botlib.safe_video(driver, user, video_name)
+        # botlib.safe_video(driver, user, video_name)
+        recorder.terminate()
+        botlib.save_last_highscore(user, last_highscore)
         print("⛔ Error occured")
         driver.quit()
         traceback.print_exc()
@@ -154,7 +176,9 @@ def run(user, caps, port):
 
     # Safe log & Video
     botlib.safe_log(user, log_name, log)
-    botlib.safe_video(driver, user, video_name)
+    botlib.save_last_highscore(user, last_highscore)
+    # botlib.safe_video(driver, user, video_name)
+    recorder.terminate()
 
     driver.quit()
 

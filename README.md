@@ -23,9 +23,15 @@
 ```
 
 ## Run Script
+Hashtags: 
 `src/settings.py` ergänzen. Script starten über:  
 ```terminal
-python main.py -user=NAME -platform=instagram -avd=bot1
+python main.py -user=NAME -platform=instagram -avd=bot1 -port=4723
+```
+Highscore
+über:  
+```terminal
+python highscore.py -user=NAME -platform=instagram
 ```
 
 ## Topics
