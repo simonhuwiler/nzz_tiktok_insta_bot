@@ -6,6 +6,7 @@ import json
 import base64
 from pathlib import Path
 import os
+import subprocess
 import settings
 
 
@@ -59,7 +60,7 @@ def next(driver):
 
 def sleep(how):
     if how == 'long': time.sleep(10)
-    if how == 'short': time.sleep(0.2)
+    if how == 'short': time.sleep(0)
     # else: print("Sleep %s not defined" % how)
 
 def create_dir(p):
@@ -72,6 +73,10 @@ def safe_log(user, n, log):
     with open(settings.data_root / Path('%s/%s.json' % (user, n)), 'w') as outfile:
         json.dump(log, outfile)    
 
+def get_video_path(user, n):
+    create_dir(settings.data_root / Path(user))
+    return settings.data_root / Path("%s/%s.mp4" % (user, n))
+
 def safe_video(driver, user, n):
     create_dir(settings.data_root / Path(user))
 
@@ -79,3 +84,9 @@ def safe_video(driver, user, n):
     filepath = settings.data_root / Path("%s/%s.mp4" % (user, n))
     with open(filepath, "wb+") as vd:
         vd.write(base64.b64decode(video_rawdata))
+
+def record_video_scrcpy(user, log_name, serial):
+    return subprocess.Popen(args=["scrcpy", "--serial", serial,
+      "-n", "-N",
+      "-r", get_video_path(user, log_name),
+      "-b", "4000000"], stdout=subprocess.PIPE)

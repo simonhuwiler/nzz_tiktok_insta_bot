@@ -27,14 +27,18 @@ def run(user, caps, port):
         driver.quit()
         raise("Wrong TikTok-User!")
 
-    # Start Screen Recording
-    driver.start_recording_screen(
-        timeLimit = "1800",
-        bitRate = "3000000",
-    )
-    recording_time = time.time()
     video_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))
-    log_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))
+    log_name = "%s_%s_%s" % (user, 'tiktok', time.strftime("%Y_%m_%d_%H%M%S"))        
+
+    # Start Screen Recording
+    # This uses the default way of screen recording. But Huawei has removed the capability. So switch to second party
+    #driver.start_recording_screen(
+    #    timeLimit = "1800",
+    #    bitRate = "3000000",
+    #)
+    
+    recorder = botlib.record_video_scrcpy(user, log_name, "73QDU16811001084")
+    recording_time = time.time()
 
     # Read
     ident = "com.zhiliaoapp.musically:id/title"
@@ -144,7 +148,8 @@ def run(user, caps, port):
 
     except Exception as e:
         botlib.safe_log(user, log_name, log)
-        botlib.safe_video(driver, user, video_name)
+        # botlib.safe_video(driver, user, video_name)
+        recorder.terminate()
         print("⛔ Error occured")
         driver.quit()
         traceback.print_exc()
@@ -154,7 +159,8 @@ def run(user, caps, port):
 
     # Safe log & Video
     botlib.safe_log(user, log_name, log)
-    botlib.safe_video(driver, user, video_name)
+    # botlib.safe_video(driver, user, video_name)
+    recorder.terminate()
 
     driver.quit()
 

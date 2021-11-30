@@ -18,7 +18,8 @@ users = {
 }
 
 # run_for_seconds = 1700
-run_for_seconds = 1200
+# run_for_seconds = 1200
+run_for_seconds = 30
 
 avds = {
   "bot1": {
@@ -33,7 +34,7 @@ avds = {
 
 desired_cap = {
   "platformName": "Android",
-  # "platformVersion": "7",
+  "platformVersion": "7", # Remove for Emulator
   "automationName": "UiAutomator2",
   "noReset": True,
   "isHeadless": True,

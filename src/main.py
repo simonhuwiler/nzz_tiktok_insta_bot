@@ -22,7 +22,7 @@ print("⌛ run for:  %s" % settings.run_for_seconds)
 print("================")
 
 caps = settings.desired_cap.copy()
-caps['avd'] = settings.avds[args.avd]['avd']
+# caps['avd'] = settings.avds[args.avd]['avd'] # Add for Emulator
 
 # Create Dir if not exist
 p = settings.data_root / args.user
