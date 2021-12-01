@@ -59,7 +59,7 @@ def next(driver):
     driver.swipe(800, 1000, 800, 600, 200)
 
 def sleep(how):
-    if how == 'long': time.sleep(10)
+    if how == 'long': time.sleep(12)
     if how == 'short': time.sleep(0)
     # else: print("Sleep %s not defined" % how)
 

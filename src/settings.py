@@ -18,8 +18,7 @@ users = {
 }
 
 # run_for_seconds = 1700
-# run_for_seconds = 1200
-run_for_seconds = 30
+run_for_seconds = 1200
 
 avds = {
   "bot1": {

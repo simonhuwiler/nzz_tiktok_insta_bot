@@ -22,6 +22,11 @@
 }
 ```
 
+## Install APK
+```
+adb -s 73QDU16811001084 install /Users/simon/Documents/projects/nzz_tiktok_insta_bot/lib/TikTok_v20.9.3_apkpure.com.apk
+```
+
 ## Run Script
 Hashtags: 
 `src/settings.py` ergänzen. Script starten über:  
@@ -31,7 +36,7 @@ python main.py -user=NAME -platform=instagram -avd=bot1 -port=4723
 Highscore
 über:  
 ```terminal
-python highscore.py -user=NAME -platform=instagram
+python highscore.py -user=hc2bab -platform=tiktok
 ```
 
 ## Topics
